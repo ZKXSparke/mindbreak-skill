@@ -93,6 +93,8 @@ git clone https://github.com/ZKXSparke/mindbreak-skill.git ~/.claude/plugins/min
 
 ## 提醒效果 / Reminder Examples
 
+![MindBreak 提醒效果](assets/screenshot-reminder.png)
+
 工作 50 分钟后，你正常收到一条技术回复，末尾会多一段：
 
 > 对了，你已经连续工作挺久了，起来走动走动，看看远处，休息几分钟再回来。
