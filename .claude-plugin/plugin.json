@@ -1,0 +1,18 @@
+{
+  "name": "mindbreak",
+  "description": "Work health reminder for Claude Code. Tracks continuous work time and gently reminds you to take breaks, eat meals, and stop overtime.",
+  "version": "1.0.0",
+  "author": {
+    "name": "ZKXSparke"
+  },
+  "homepage": "https://github.com/ZKXSparke/mindbreak-skill",
+  "repository": "https://github.com/ZKXSparke/mindbreak-skill",
+  "license": "MIT",
+  "keywords": [
+    "health",
+    "break-reminder",
+    "productivity",
+    "wellbeing",
+    "work-life-balance"
+  ]
+}

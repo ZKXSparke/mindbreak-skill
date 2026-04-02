@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'ts=$(date +%s); echo $ts >> ~/.claude/mindbreak_activity.log; cutoff=$((ts - 86400)); awk -v c=$cutoff \"NR>0 && \\$1+0 >= c\" ~/.claude/mindbreak_activity.log > ~/.claude/mindbreak_activity.tmp && mv ~/.claude/mindbreak_activity.tmp ~/.claude/mindbreak_activity.log'",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}
