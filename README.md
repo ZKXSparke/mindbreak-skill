@@ -59,19 +59,17 @@ User-controlled — say "don't remind me" to silence reminders for the session. 
 ## 工作原理 / How It Works
 
 ```
-用户发消息 ──> Hook 记录时间戳到 ~/.claude/mindbreak_activity.log
+用户发消息 ──> Hook 脚本记录时间戳 + 计算工作时长
                     │
-Claude 生成回复 ──> Skill 读取时间戳日志
-                    │
-                    ├── 计算连续活跃段（间隔 > 15 分钟 = 新段）
-                    ├── 检查是否达到提醒条件
-                    └── 如需提醒，附加在回复末尾
+                    ├── 未达阈值 → 不输出（Claude 无感知）
+                    └── 达到阈值 → 输出 MINDBREAK_xxx 信号
+                                      │
+Claude 生成回复 ──> 看到信号，在回复末尾自然地加入提醒
 ```
 
-- Hook 在每次用户发消息时记录 Unix 时间戳，并自动清理 24 小时前的旧记录
-- Skill 读取时间戳日志，将连续的时间戳分段（间隔 > 15 分钟视为离开）
-- 当前段持续 > 45 分钟时触发提醒，结合当前时间判断提醒类型
-- 无日志时降级为基于对话轮数的粗略判断
+- Hook 在每次用户发消息时记录 Unix 时间戳，计算当前连续工作段时长（间隔 > 15 分钟视为离开），并自动清理 24 小时前的旧记录
+- 当前段持续 > 45 分钟时，Hook 输出 MINDBREAK_xxx 触发信号，结合当前时间判断提醒类型
+- Claude 只需响应触发信号，无需手动读取日志
 
 ## 安装 / Installation
 
