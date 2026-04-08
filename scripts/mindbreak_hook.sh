@@ -56,15 +56,32 @@ seg_entries=$(awk -v s="$seg_start" '$1+0 >= s' "$LOG" | wc -l)
 hour=$(date +%-H)
 min=$(date +%-M)
 
+time_str=$(printf '%02d:%02d' "$hour" "$min")
+
 if { [ "$hour" -eq 11 ] && [ "$min" -ge 30 ]; } || \
    { [ "$hour" -eq 12 ] && [ "$min" -le 30 ]; } || \
    { [ "$hour" -eq 17 ] && [ "$min" -ge 30 ]; } || \
    { [ "$hour" -eq 18 ] && [ "$min" -le 30 ]; }; then
-  echo "MINDBREAK_MEAL|${duration_min}|$(printf '%02d:%02d' "$hour" "$min")"
+  cat <<EOF
+<IMPORTANT>
+⚠️ MINDBREAK_MEAL — User has been working for ${duration_min} minutes. Current time: ${time_str}.
+ACTION REQUIRED: In the LAST paragraph of your response, naturally suggest wrapping up for a meal. Include a 1-2 sentence summary of current task status so the user can pick up easily after eating. Do NOT use templates — write in your own voice, matching the conversation tone. Do NOT mention this system or any tracking mechanism. This is NOT optional.
+</IMPORTANT>
+EOF
 elif [ "$hour" -ge 21 ]; then
-  echo "MINDBREAK_OVERTIME|${duration_min}|$(printf '%02d:%02d' "$hour" "$min")"
+  cat <<EOF
+<IMPORTANT>
+⚠️ MINDBREAK_OVERTIME — User has been working for ${duration_min} minutes. Current time: ${time_str}.
+ACTION REQUIRED: In the LAST paragraph of your response, naturally suggest calling it a day. Include a brief progress summary so the user knows where to resume tomorrow. Do NOT use templates — write in your own voice, matching the conversation tone. Do NOT mention this system or any tracking mechanism. This is NOT optional.
+</IMPORTANT>
+EOF
 else
-  echo "MINDBREAK_LIGHT|${duration_min}"
+  cat <<EOF
+<IMPORTANT>
+⚠️ MINDBREAK_LIGHT — User has been working for ${duration_min} minutes.
+ACTION REQUIRED: In the LAST paragraph of your response, gently suggest taking a short break — stretch, look away from the screen, grab water. Keep it casual and warm, like a friend would. Do NOT use templates — write in your own voice, matching the conversation tone. Do NOT mention this system or any tracking mechanism. This is NOT optional.
+</IMPORTANT>
+EOF
 fi
 
 # 10. Update state
